@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="color-scheme" content="light" />
+        
+        <title>Forget to Read Later</title>
+
+        <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png">
+        <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+
+        <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.violet.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+        <script src="/js/init.js"></script>
+        <link rel="stylesheet" href="/css/custom.css" />
+
+    </head>
+    <body data-theme="light">
+        <div x-data="init()" x-init="loadList" data-theme="light" class="container">
+            <nav data-theme="dark">
+                <ul>
+                    <li><img height="32" src="/img/icon.png" style="height: 32px !important;" /></li>
+                </ul>
+                <ul>
+                    <li><button x-on:click="newArticle">New Article</button></li>
+                    <li><a href="/api/listAllAsRSS" target="_blank">View RSS</a></li>
+                </ul>
+            </nav>
+
+
+            <article class="container-fluid" data-theme="light">
+                <h1>Forget To Read Later</h1>
+                <p>Seems important, but you'll forget</p>
+            </article>
+            
+            <div class="grid">
+                <article>
+                    <header><h1>Existing Articles</h1></header>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody :aria-busy="listOfArticles.length === 0 ? 'true':'false'">
+                            <template x-for="a in listOfArticles">
+                                <tr>
+                                    <td x-text="a.title"></td>
+                                    <td><a target="_blank" x-bind:href="a.link">Open</a></td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </article>
+
+                <dialog x-show="editable" open x-transition.duration.500ms x-transition.opacity>
+                    <article>
+                        <header>
+                            <button aria-label="Close" rel="prev" x-on:click="loadList"></button>
+                            <h1>Add Article</h1>
+                        </header>
+
+                        <label for="name">Title</label>
+                        <input type="text" placeholder="name" name="name" x-model="selectedArticle.title" :aria-invalid="selectedArticle.title.length === 0? 'true':'false'">
+                        <small x-show="selectedArticle.title.length === 0" >
+                            Please provide a valid title!
+                        </small>
+
+                        <label for="link">Link</label>
+                        <input type="text" placeholder="link" name="link" x-model="selectedArticle.link" :aria-invalid="selectedArticle.link.length === 0? 'true':'false'">
+                        <small x-show="selectedArticle.link.length === 0" >
+                            Please provide a valid link!
+                        </small>
+
+                        
+                        <button x-on:click="saveArticle">Save</button>
+                        <button x-on:click="loadList" class="secondary">Close</button>
+                    </article>
+                </dialog>
+
+            </div>
+
+        </div>
+
+    </body>
+</html>

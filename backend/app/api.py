@@ -4,13 +4,20 @@ import datetime
 from bson.json_util import dumps
 from bson.timestamp import Timestamp
 from bson.objectid import ObjectId
+from pydantic import BaseModel
+from fastapi.staticfiles import StaticFiles
 import json
 import os
 from rfeed import *
 
+class ArticleItem(BaseModel):
+    title: str
+    link: str
+
 api_app = FastAPI(title="api-app")
 app = FastAPI(title="spa-app")
 app.mount("/api", api_app)
+app.mount("/", StaticFiles(directory="static", html=True), name="static")
 
 client = pymongo.MongoClient(os.environ["MDBCONNSTR"].strip())
 db = client["forgetmelater"]
@@ -45,3 +52,16 @@ async def listAll():
         items = items
     )
     return feed.rss()
+
+@api_app.put("/save/{id}")
+async def save(id:str, ai: ArticleItem):
+    # i'm bad at python frameworks
+    d = ai.model_dump()
+    col.update_one({"_id": ObjectId(id) }, {"$set": d })
+
+@api_app.get("/new")
+async def new():
+    obj = {"title":"", "link":"" }
+    id = col.insert_one(obj).inserted_id
+    obj["_id"] = id
+    return json.loads(dumps(obj))
