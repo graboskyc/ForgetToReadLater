@@ -52,8 +52,11 @@
                         <tbody :aria-busy="listOfArticles.length === 0 ? 'true':'false'">
                             <template x-for="a in listOfArticles">
                                 <tr>
-                                    <td x-text="a.title"></td>
-                                    <td><a target="_blank" x-bind:href="a.link">Open</a></td>
+                                    <td x-text="a.title" x-bind:data-tooltip="a.description"></td>
+                                    <td>
+                                        <a role="button" target="_blank" x-bind:href="a.link">Open</a>
+                                        <button x-on:click="deleteArticle(a)" class="btn-delete">Delete</button>
+                                    </td>
                                 </tr>
                             </template>
                         </tbody>
@@ -67,18 +70,11 @@
                             <h1>Add Article</h1>
                         </header>
 
-                        <label for="name">Title</label>
-                        <input type="text" placeholder="name" name="name" x-model="selectedArticle.title" :aria-invalid="selectedArticle.title.length === 0? 'true':'false'">
-                        <small x-show="selectedArticle.title.length === 0" >
-                            Please provide a valid title!
-                        </small>
-
                         <label for="link">Link</label>
                         <input type="text" placeholder="link" name="link" x-model="selectedArticle.link" :aria-invalid="selectedArticle.link.length === 0? 'true':'false'">
                         <small x-show="selectedArticle.link.length === 0" >
                             Please provide a valid link!
                         </small>
-
                         
                         <button x-on:click="saveArticle">Save</button>
                         <button x-on:click="loadList" class="secondary">Close</button>

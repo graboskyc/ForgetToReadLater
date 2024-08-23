@@ -9,10 +9,13 @@ from fastapi.staticfiles import StaticFiles
 import json
 import os
 from rfeed import *
+import requests
+from bs4 import BeautifulSoup
 
 class ArticleItem(BaseModel):
     title: str
     link: str
+    description: str
 
 api_app = FastAPI(title="api-app")
 app = FastAPI(title="spa-app")
@@ -40,7 +43,8 @@ async def listAll():
         item = Item(
             title = a["title"],
             link= a["link"],
-            guid = Guid(str(a["_id"]))
+            guid = Guid(str(a["_id"])),
+            description = a['description']
         )
         items.append(item)
 
@@ -57,6 +61,12 @@ async def listAll():
 async def save(id:str, ai: ArticleItem):
     # i'm bad at python frameworks
     d = ai.model_dump()
+    page = requests.get(d["link"])
+    soup = BeautifulSoup(page.content, 'html.parser')
+    title = soup.title.text
+    firstPara = soup.select('p')[0].text
+    d["title"] = title
+    d["description"] = firstPara 
     col.update_one({"_id": ObjectId(id) }, {"$set": d })
 
 @api_app.get("/new")
@@ -65,3 +75,7 @@ async def new():
     id = col.insert_one(obj).inserted_id
     obj["_id"] = id
     return json.loads(dumps(obj))
+
+@api_app.get("/delete/{id}")
+async def delete(id:str):
+    col.delete_one({"_id": ObjectId(id) })

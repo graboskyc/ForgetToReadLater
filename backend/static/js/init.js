@@ -21,7 +21,8 @@ function init() {
             
                 var _id = this.selectedArticle._id.$oid;
                 delete this.selectedArticle._id;
-
+                this.selectedArticle.title = "";
+                this.selectedArticle.description = "";
                 console.log(this.selectedArticle);
                 await fetch('/api/save/'+_id, {
                     method: 'PUT',
@@ -39,6 +40,18 @@ function init() {
             editable = false;
             this.selectedArticle = await (await fetch('/api/new')).json();
             this.editable = true;
+        },
+
+        async deleteArticle(a) {
+            console.log('Loading List');
+            this.selectedArticle =a;
+            if (confirm("Please confirm deleting '"+this.selectedArticle.title+"'") == true) {
+                var _id = this.selectedArticle._id.$oid;
+                await (await fetch('/api/delete/'+_id)).json();
+                console.log(this.listOfArticles);
+                await this.loadList();
+                this.editable = false;
+            }
         },
 
     }
