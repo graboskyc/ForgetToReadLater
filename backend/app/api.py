@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 import pymongo
 import datetime
 from bson.json_util import dumps
@@ -51,7 +51,7 @@ async def listAll():
         description = "Stuff I'm gonna forget to read later but I want to.",
         items = items
     )
-    return feed.rss()
+    return Response(content=feed.rss(), media_type="text/xml")
 
 @api_app.put("/save/{id}")
 async def save(id:str, ai: ArticleItem):
