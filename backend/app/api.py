@@ -32,12 +32,12 @@ async def hello():
     
 @api_app.get("/listAll")
 async def listAll():
-    cursor = col.find({})
+    cursor = col.find({}).sort("_id", pymongo.DESCENDING)
     return json.loads(dumps(cursor))
 
 @api_app.get("/listAllAsRSS")
 async def listAll():
-    cursor = col.find({})
+    cursor = col.find({}).sort("_id", pymongo.DESCENDING)
     items = []
     for a in cursor:
         item = Item(
@@ -64,7 +64,11 @@ async def save(id:str, ai: ArticleItem):
     page = requests.get(d["link"])
     soup = BeautifulSoup(page.content, 'html.parser')
     title = soup.title.text
-    firstPara = soup.select('p')[0].text
+    paras = soup.select('p')
+    if (len(paras) > 0):
+        firstPara = soup.select('p')[0].text
+    else:
+        firstPara = title
     d["title"] = title
     d["description"] = firstPara 
     col.update_one({"_id": ObjectId(id) }, {"$set": d })
