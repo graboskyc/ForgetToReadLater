@@ -1,0 +1,22 @@
+{
+    "name": "Forget To Read Later",
+    "version": "0.0.0.1",
+    "manifest_version": 3,
+    "description": "An extension to send to Forget to Read Later, where you will forget to read it later.",
+    "icons": {
+        "16": "icons/icon_16x16.png",
+        "32": "icons/icon_32x32.png",
+        "48": "icons/icon_48x48.png",
+        "128": "icons/icon_128x128.png"
+    },
+    "permissions":[
+        "tabs",
+        "http://*/"
+    ],
+    "action": {
+        "default_popup": "/popup/popup.html"
+    },
+    "content_security_policy": {
+        "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';"
+    }
+}
