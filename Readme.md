@@ -13,12 +13,18 @@ Links are automatically pulled to get the title and description (first paragraph
 ## Running
 Create a `.env` file in `backend` with a single linke of `MDBCONNSTR="mongodb+srv://"` with your MongoDB Server
 
-## Screenshots
+## App Screenshots
 
 ![](ss/ss01.png)
 
 ![](ss/ss02.png)
 
+## Browser Extension
+Tested on Edge using [these instructions](https://learn.microsoft.com/en-us/microsoft-edge/extensions-chromium/getting-started/extension-sideloading) to load an unpacked extension. Need to change [this line](https://github.com/graboskyc/ForgetToReadLater/blob/main/Extension/popup/popup.js#L15) to your server.
+
+![](ss/ss04.png)
+
+## Use within FreshRSS
 ![](ss/ss03.png)
 
 ## Techstack
