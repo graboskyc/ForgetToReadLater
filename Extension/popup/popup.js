@@ -37,6 +37,6 @@ window.onload = async function() {
     txt_title.setAttribute("value", tab.title);
 
     var btn = document.getElementById("submit");
-    btn.onclick = writeArticle();
+    btn.addEventListener("click", writeArticle);
 };
 
