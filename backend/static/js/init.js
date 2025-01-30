@@ -10,6 +10,7 @@ function init() {
             this.listOfArticles= await (await fetch('/api/listAll')).json();
             console.log(this.listOfArticles);
             this.editable = false;
+            this.editTitle = false;
         },
 
         delay(ms) {
@@ -53,7 +54,7 @@ function init() {
                     },
                     body: JSON.stringify(this.selectedArticle)
                 });
-                this.editable = false;
+                this.editTitle = false;
                 await this.loadList();
         },
 
