@@ -2,6 +2,7 @@ function init() {
     return {
         listOfArticles: [],
         editable: false,
+        editTitle:false,
         selectedArticle: {"title":"", "link":"https://"},
 
         async loadList() {
@@ -13,8 +14,7 @@ function init() {
 
         delay(ms) {
             return new Promise(resolve => setTimeout(resolve, ms))
-        },
-          
+        },          
 
         async saveArticle() {
             console.log('Saving Article');
@@ -25,6 +25,28 @@ function init() {
                 this.selectedArticle.description = "";
                 console.log(this.selectedArticle);
                 await fetch('/api/save/'+_id, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(this.selectedArticle)
+                });
+                this.editable = false;
+                await this.loadList();
+        },
+
+        async editArticle(a) {
+            this.selectedArticle = a;
+            this.editTitle = true;
+        },
+
+        async editSaveArticle() {
+            console.log('Saving Article');
+            
+                var _id = this.selectedArticle._id.$oid;
+                delete this.selectedArticle._id;
+                console.log(this.selectedArticle);
+                await fetch('/api/edit/'+_id, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'

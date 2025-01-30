@@ -55,6 +55,7 @@
                                     <td x-text="a.title" x-bind:data-tooltip="a.description"></td>
                                     <td>
                                         <a role="button" target="_blank" x-bind:href="a.link">Open</a>
+                                        <button x-on:click="editArticle(a)">Edit</button>
                                         <button x-on:click="deleteArticle(a)" class="btn-delete">Delete</button>
                                     </td>
                                 </tr>
@@ -77,6 +78,24 @@
                         </small>
                         
                         <button x-on:click="saveArticle">Save</button>
+                        <button x-on:click="loadList" class="secondary">Close</button>
+                    </article>
+                </dialog>
+
+                <dialog x-show="editTitle" open x-transition.duration.500ms x-transition.opacity>
+                    <article>
+                        <header>
+                            <button aria-label="Close" rel="prev" x-on:click="loadList"></button>
+                            <h1>Edit Article</h1>
+                        </header>
+
+                        <label for="title">Title</label>
+                        <input type="text" placeholder="title" name="title" x-model="selectedArticle.title" :aria-invalid="selectedArticle.title.length === 0? 'true':'false'">
+                        <small x-show="selectedArticle.title.length === 0" >
+                            Please provide a valid link!
+                        </small>
+                        
+                        <button x-on:click="editSaveArticle">Save</button>
                         <button x-on:click="loadList" class="secondary">Close</button>
                     </article>
                 </dialog>

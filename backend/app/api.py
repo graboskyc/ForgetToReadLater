@@ -74,6 +74,11 @@ async def save(id:str, d: Dict[Any, Any]):
     d["description"] = firstPara 
     col.update_one({"_id": ObjectId(id) }, {"$set": d })
 
+@api_app.put("/edit/{id}")
+async def save(id:str, d: Dict[Any, Any]):
+    obj = {"title":d["title"]}
+    col.update_one({"_id": ObjectId(id) }, {"$set": obj })
+
 @api_app.get("/new")
 async def new():
     obj = {"title":"", "link":"" }
